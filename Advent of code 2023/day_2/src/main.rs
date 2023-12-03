@@ -10,7 +10,7 @@ const MAX_GREEN : i32 = 13;
 const MAX_BLUE : i32 = 14;
 
 fn main() {
-    let data = lines_from_file("./data/input.txt");
+    let data = lines_from_file("./Advent of code 2023/day_2/data/input.txt");
     
     let mut sum_valid_games : i32 = 0;
     let mut sum_game_power : i32 = 0;

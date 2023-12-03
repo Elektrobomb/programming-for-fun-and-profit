@@ -6,7 +6,7 @@ use std::{
 use regex::Regex;
 
 fn main() {
-    let data = lines_from_file("./data/input_matt.txt");
+    let data = lines_from_file("./Advent of code 2023/day_1/data/input.txt");
 
     let mut sum_calibration_vals : i32 = 0;
     for s in data{
@@ -75,7 +75,7 @@ fn find_first_number_substring(input_string : &String, is_flipped : bool) -> (i3
     match matched_substr{
         None => return (input_string.len() as i32, -1),
         Some(value) => {
-            let mut num: i32 = 0;
+            let mut num: i32;
             if !is_flipped{
                 num = convert_text_digit_to_i32(&value.as_str());
             }
