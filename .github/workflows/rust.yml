@@ -35,4 +35,4 @@ jobs:
     steps:
     - uses: actions/checkout@v3
     - name: clippy all
-      run: sh -x ./scripts/cargo_test_all.sh
+      run: sh -x ./scripts/cargo_clippy_all.sh
