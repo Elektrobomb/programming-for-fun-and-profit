@@ -10,18 +10,29 @@ env:
   CARGO_TERM_COLOR: always
 
 jobs:
-  build:
+  rust-build:
 
     runs-on: ubuntu-latest
 
     steps:
     - uses: actions/checkout@v3
-    - name: Build, test, clippy all
-      run: sh -x ./scripts/ci.sh
+    - name: Build all
+      run: sh -x ./scripts/cargo_build_all.sh
 
-#    steps:
-#    - uses: actions/checkout@v3
-#    - name: Build
-#      run: cargo build --verbose
-#    - name: Run tests
-#      run: cargo test --verbose
+  rust-test:
+
+    runs-on: ubuntu-latest
+
+    steps:
+    - uses: actions/checkout@v3
+    - name: Test all
+      run: sh -x ./scripts/cargo_test_all.sh
+
+  rust-clippy:
+
+    runs-on: ubuntu-latest
+
+    steps:
+    - uses: actions/checkout@v3
+    - name: clippy all
+      run: sh -x ./scripts/cargo_test_all.sh
