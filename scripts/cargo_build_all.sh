@@ -2,7 +2,10 @@ cargo_build(){
   exit_code=0
   while read path; do
     printf "Project: %s\n" "$path"
-    cargo build --verbose --manifest-path "$path" || exit_code=1
+    path_without_file="${path%"Cargo.toml"}"
+    cd "$path_without_file"
+    cargo build --verbose || exit_code=1
+    cd -
   done
   exit $exit_code
 }
