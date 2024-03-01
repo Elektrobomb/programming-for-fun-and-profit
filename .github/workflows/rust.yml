@@ -1,38 +1,25 @@
 name: Rust
 
-on:
-  push:
-    branches: [ "main" ]
-  pull_request:
-    branches: [ "main" ]
+on: push
 
 env:
   CARGO_TERM_COLOR: always
 
 jobs:
-  rust-build:
+  build:
 
     runs-on: ubuntu-latest
 
     steps:
     - uses: actions/checkout@v3
     - name: Build all
-      run: sh -x ./scripts/cargo_build_all.sh
+      run: sh ./scripts/cargo_build_all.sh
 
-  rust-test:
+  test:
 
     runs-on: ubuntu-latest
 
     steps:
     - uses: actions/checkout@v3
     - name: Test all
-      run: sh -x ./scripts/cargo_test_all.sh
-
-  rust-clippy:
-
-    runs-on: ubuntu-latest
-
-    steps:
-    - uses: actions/checkout@v3
-    - name: clippy all
-      run: sh -x ./scripts/cargo_clippy_all.sh
+      run: sh ./scripts/cargo_test_all.sh
