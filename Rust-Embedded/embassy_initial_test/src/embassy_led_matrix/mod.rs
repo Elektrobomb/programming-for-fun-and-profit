@@ -1,16 +1,16 @@
-use embassy_stm32::gpio::AnyPin;
-use embassy_stm32::gpio::low_level::Pin;
+use embassy_stm32::gpio::{AnyPin, Level, Output, Pin, Speed};
+use embedded_graphics;
 
 // Struct to represent the LED matrix
 // Stores the number of rows and columns, pins for the rows and columns (in separate arrays) and the state of the LED matrix (it is a 2D array of type u8)
 pub struct LedMatrix<'d, const ROWS: usize, const COLUMNS: usize> {
-    row_pins: [embassy_stm32::PeripheralRef<'d, AnyPin>; ROWS],
-    column_pins: [embassy_stm32::PeripheralRef<'d, AnyPin>; COLUMNS],
+    row_pins: [Output<'d, AnyPin>; ROWS],
+    column_pins: [Output<'d, AnyPin>; COLUMNS],
     display: [[u8; COLUMNS]; ROWS],
 }
 
 impl<'d, const ROWS: usize, const COLUMNS: usize> LedMatrix<'d, ROWS, COLUMNS> {
-    pub fn new(input_row_pins: [embassy_stm32::PeripheralRef<'d, AnyPin>; ROWS], input_column_pins: [embassy_stm32::PeripheralRef<'d, AnyPin>; COLUMNS]) -> Self {
+    pub fn new(input_row_pins: [Output<'d, AnyPin>; ROWS], input_column_pins: [Output<'d, AnyPin>; COLUMNS]) -> Self {
         let display = [[0; COLUMNS]; ROWS];
 
         Self {
@@ -44,11 +44,11 @@ impl<'d, const ROWS: usize, const COLUMNS: usize> LedMatrix<'d, ROWS, COLUMNS> {
         self.display = [[0; COLUMNS]; ROWS];
     }
 
-    pub fn update(&self) {
+    pub fn update(&mut self) {
         for i in 0..ROWS {
             self.row_pins[i].set_low();
             for j in 0..COLUMNS {
-                if self.display[i][j] == 1 {
+                if self.display[i][j] != 0 {
                     self.column_pins[j].set_high();
                 } else {
                     self.column_pins[j].set_low();
