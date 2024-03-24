@@ -1,8 +1,5 @@
 #include "stm32f4xx_hal.h"
-#include "gpio_pin.hpp"
-
-#define LED_PIN                                GPIO_PIN_13
-#define LED_GPIO_PORT                          GPIOC
+#include "led_matrix.hpp"
 
 void SystemClock_Config();
 void GPIO_Config();
@@ -22,12 +19,34 @@ int main() {
   I2C_Config();
   TIM_Config();
 
-  GpioPin onboard_led(LED_GPIO_PORT, LED_PIN);
-  onboard_led.setMode(GpioPinMode::Output);
+  GpioPin col_pins[] = {
+    GpioPin(GPIOA, GPIO_PIN_0),
+    GpioPin(GPIOA, GPIO_PIN_1),
+    GpioPin(GPIOA, GPIO_PIN_2),
+    GpioPin(GPIOA, GPIO_PIN_3),
+    GpioPin(GPIOA, GPIO_PIN_4),
+    GpioPin(GPIOA, GPIO_PIN_5),
+    GpioPin(GPIOA, GPIO_PIN_6),
+    GpioPin(GPIOA, GPIO_PIN_7)
+  };
+  GpioPin row_pins[] = {
+    GpioPin(GPIOB, GPIO_PIN_0),
+    GpioPin(GPIOB, GPIO_PIN_1),
+    GpioPin(GPIOB, GPIO_PIN_2),
+    GpioPin(GPIOB, GPIO_PIN_3),
+    GpioPin(GPIOB, GPIO_PIN_4),
+    GpioPin(GPIOB, GPIO_PIN_5),
+    GpioPin(GPIOB, GPIO_PIN_6),
+    GpioPin(GPIOC, GPIO_PIN_13)
+  };
+
+  LedMatrix<8,8> matrix(col_pins, row_pins);
+  matrix.initialize();
 
   while (1)
   {
-    onboard_led.digitalWrite((GpioPinState)(HAL_GetTick() % 1000 < 500));
+    matrix.setPixel(7, 7, HAL_GetTick() % 1000 < 500);
+    matrix.update();
   }
 }
 
