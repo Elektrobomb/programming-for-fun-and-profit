@@ -17,7 +17,7 @@ public:
      * @param col_pins An array of GpioPin objects representing the column pins.
      * @param row_pins An array of GpioPin objects representing the row pins.
      */
-    LedMatrix(GpioPin *col_pins, GpioPin *row_pins) : m_col_pins(col_pins), m_row_pins(row_pins) {}
+    LedMatrix(GpioPin col_pins[COLS], GpioPin row_pins[ROWS]) : m_col_pins(col_pins), m_row_pins(row_pins) {}
 
     /**
      * @brief Destructor for the LedMatrix class.
@@ -82,6 +82,19 @@ public:
             HAL_Delay(100);
             // Set the row pin to LOW
             m_row_pins[row].digitalWrite(GpioPinState::Low);
+        }
+    }
+
+    /**
+     * @brief Clones the frame to the LED matrix.
+     * 
+     * @param frame The frame to clone.
+     */
+    void cloneFrame(uint8_t frame[COLS][ROWS]) {
+        for (size_t i = 0; i < COLS; i++) {
+            for (size_t j = 0; j < ROWS; j++) {
+                m_pixel_buffer[i][j] = frame[i][j];
+            }
         }
     }
 
