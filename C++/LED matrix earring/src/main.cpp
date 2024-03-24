@@ -1,17 +1,19 @@
 #include "stm32f4xx_hal.h"
+#include "gpio_pin.hpp"
 
 #define LED_PIN                                GPIO_PIN_13
 #define LED_GPIO_PORT                          GPIOC
 
-void LED_Init();
-void SystemClock_Config(void);
-void GPIO_Config(void);
-void USART_Config(void);
-void SPI_Config(void);
-void I2C_Config(void);
-void TIM_Config(void);
+void SystemClock_Config();
+void GPIO_Config();
+void USART_Config();
+void SPI_Config();
+void I2C_Config();
+void TIM_Config();
 
-int main(void) {
+void Error_Handler();
+
+int main() {
   HAL_Init();
   SystemClock_Config();
   GPIO_Config();
@@ -20,29 +22,20 @@ int main(void) {
   I2C_Config();
   TIM_Config();
 
-  LED_Init();
+  GpioPin onboard_led(LED_GPIO_PORT, LED_PIN);
+  onboard_led.setMode(GpioPinMode::Output);
 
   while (1)
   {
-    HAL_GPIO_TogglePin(LED_GPIO_PORT, LED_PIN);
-    HAL_Delay(500);
+    onboard_led.digitalWrite((GpioPinState)(HAL_GetTick() % 1000 < 500));
   }
 }
 
-void LED_Init() {
-  GPIO_InitTypeDef GPIO_InitStruct;
-  GPIO_InitStruct.Pin = LED_PIN;
-  GPIO_InitStruct.Mode = GPIO_MODE_OUTPUT_PP;
-  GPIO_InitStruct.Pull = GPIO_PULLUP;
-  GPIO_InitStruct.Speed = GPIO_SPEED_LOW;
-  HAL_GPIO_Init(LED_GPIO_PORT, &GPIO_InitStruct);
-}
-
-void SysTick_Handler(void) {
+extern "C" void SysTick_Handler() {
   HAL_IncTick();
 }
 
-void SystemClock_Config(void) {
+void SystemClock_Config() {
   RCC_OscInitTypeDef RCC_OscInitStruct;
   RCC_ClkInitTypeDef RCC_ClkInitStruct;
 
@@ -74,29 +67,29 @@ void SystemClock_Config(void) {
   }
 }
 
-void GPIO_Config(void) {
+void GPIO_Config() {
   // Enable GPIO clocks
   __HAL_RCC_GPIOA_CLK_ENABLE();
   __HAL_RCC_GPIOB_CLK_ENABLE();
   __HAL_RCC_GPIOC_CLK_ENABLE();
 }
 
-void USART_Config(void) {
+void USART_Config() {
   // Configure USART
 }
 
-void SPI_Config(void) {
+void SPI_Config() {
   // Configure SPI
 }
 
-void I2C_Config(void) {
+void I2C_Config() {
   // Configure I2C
 }
 
-void TIM_Config(void) {
+void TIM_Config() {
   // Configure TIM
 }
 
-void Error_Handler(void) {
+void Error_Handler() {
   // Error handling code
 }
