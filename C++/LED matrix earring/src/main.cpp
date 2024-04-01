@@ -64,12 +64,12 @@ int main() {
     uint32_t pos_y = pos / 8;
 
     //matrix.setPixel(pos_x, pos_y, 1);
-    //matrix.cloneFrame(space_invader);
-    //matrix.invertFrame();
+    matrix.cloneFrame(space_invader);
+    matrix.invertFrame();
 
     //matrix.drawLine(0, 0, pos_x, pos_y, 255);
 
-    matrix.drawCircle(pos_x, pos_y, 3, 255);
+    //matrix.drawCircle(pos_x, pos_y, 3, 255);
 
     matrix.update();
   }
