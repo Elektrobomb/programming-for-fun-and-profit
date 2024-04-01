@@ -75,11 +75,17 @@ int main() {
     //matrix.cloneFrame(space_invader);
     //matrix.invertFrame();
 
-    //matrix.drawLine(0, 0, pos_x, pos_y, 255);
+    matrix.drawLine(0, 0, pos_x, pos_y, 255);
 
     matrix.drawCircle(pos_x, pos_y, 3, 255);
 
-    matrix.update();
+    const uint32_t FPS = 60;
+    const uint32_t FRAME_TIME = 1000 / FPS;
+    static uint32_t last_update = 0;
+    if (HAL_GetTick() - last_update > FRAME_TIME) {
+      last_update = HAL_GetTick();
+      matrix.update();
+    }
   }
 }
 

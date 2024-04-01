@@ -10,6 +10,7 @@
 #include "gpio_pin.hpp"
 
 #define BRIGHTNESS_STEP_SIZE 7
+#define BRIGHTNESS_DELAY_MULTIPLIER 100
 
 // Gamma brightness lookup table <https://victornpb.github.io/gamma-table-generator>
 // gamma = 3.00 steps = 256 range = 0-255
@@ -115,7 +116,7 @@ public:
                     m_col_pins[col].digitalWrite(m_col_active_state);
                 }
                 // Delay for a short period of time to control brightness
-                for (size_t i = 0; i < gamma_corrected_brightness; i+=BRIGHTNESS_STEP_SIZE){
+                for (size_t i = 0; i < gamma_corrected_brightness * BRIGHTNESS_DELAY_MULTIPLIER; i+=BRIGHTNESS_STEP_SIZE){
                     __NOP();
                 }
                 // Reset the column pin
