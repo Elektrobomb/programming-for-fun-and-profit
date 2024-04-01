@@ -10,6 +10,18 @@ void TIM_Config();
 
 void Error_Handler();
 
+static uint8_t space_invader[8][8]  = {
+  0xfe, 0xda, 0xda, 0xfe, 0xfe, 0xd5, 0xd5, 0xfe, 
+  0xfe, 0xd2, 0x8b, 0xeb, 0xe9, 0x87, 0xd0, 0xfe, 
+  0xfd, 0xa3, 0x10, 0x19, 0x19, 0x11, 0xa3, 0xfd, 
+  0xe3, 0x38, 0x5b, 0x13, 0x15, 0x5e, 0x33, 0xdc, 
+  0x65, 0x11, 0x00, 0x00, 0x00, 0x00, 0x11, 0x65, 
+  0x77, 0x6c, 0x13, 0x1e, 0x1e, 0x12, 0x68, 0x77, 
+  0xb4, 0xac, 0x77, 0xa8, 0xa7, 0x75, 0xad, 0xb2, 
+  0xff, 0xfd, 0xc1, 0xbd, 0xbf, 0xc2, 0xfd, 0xff
+};
+
+
 int main() {
   HAL_Init();
   SystemClock_Config();
@@ -20,32 +32,42 @@ int main() {
   TIM_Config();
 
   GpioPin col_pins[] = {
-    GpioPin(GPIOA, GPIO_PIN_0),
-    GpioPin(GPIOA, GPIO_PIN_1),
+    GpioPin(GPIOB, GPIO_PIN_5),
     GpioPin(GPIOA, GPIO_PIN_2),
     GpioPin(GPIOA, GPIO_PIN_3),
-    GpioPin(GPIOA, GPIO_PIN_4),
-    GpioPin(GPIOA, GPIO_PIN_5),
+    GpioPin(GPIOA, GPIO_PIN_15),
     GpioPin(GPIOA, GPIO_PIN_6),
-    GpioPin(GPIOA, GPIO_PIN_7)
+    GpioPin(GPIOB, GPIO_PIN_3),
+    GpioPin(GPIOB, GPIO_PIN_7),
+    GpioPin(GPIOB, GPIO_PIN_8)
   };
   GpioPin row_pins[] = {
-    GpioPin(GPIOB, GPIO_PIN_0),
-    GpioPin(GPIOB, GPIO_PIN_1),
-    GpioPin(GPIOB, GPIO_PIN_2),
-    GpioPin(GPIOB, GPIO_PIN_3),
-    GpioPin(GPIOB, GPIO_PIN_4),
-    GpioPin(GPIOB, GPIO_PIN_5),
+    GpioPin(GPIOA, GPIO_PIN_12),
     GpioPin(GPIOB, GPIO_PIN_6),
-    GpioPin(GPIOC, GPIO_PIN_13)
+    GpioPin(GPIOA, GPIO_PIN_7),
+    GpioPin(GPIOB, GPIO_PIN_4),
+    GpioPin(GPIOA, GPIO_PIN_0),
+    GpioPin(GPIOA, GPIO_PIN_5),
+    GpioPin(GPIOA, GPIO_PIN_1),
+    GpioPin(GPIOA, GPIO_PIN_4)
   };
 
-  LedMatrix<8,8> matrix(col_pins, row_pins);
+  LedMatrix<8,8> matrix(col_pins, row_pins, GpioPinState::High, GpioPinState::Low);
   matrix.initialize();
 
   while (1)
   {
-    matrix.setPixel(7, 7, HAL_GetTick() % 1000 < 500);
+    /*
+    uint32_t pos = (HAL_GetTick() / 20) % 64;
+    uint32_t pos_x = pos % 8;
+    uint32_t pos_y = pos / 8;
+
+    matrix.clear();
+    matrix.setPixel(pos_x, pos_y, 1);*/
+    matrix.clear(); 
+    matrix.cloneFrame(space_invader);
+    matrix.invertFrame();
+
     matrix.update();
   }
 }
@@ -112,3 +134,4 @@ void TIM_Config() {
 void Error_Handler() {
   // Error handling code
 }
+

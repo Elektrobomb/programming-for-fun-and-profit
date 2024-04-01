@@ -13,6 +13,8 @@ enum GpioPinState {
     High = 1
 };
 
+GpioPinState operator!(GpioPinState state);
+
 class GpioPin {
 public:
     GpioPin(GPIO_TypeDef* port, uint16_t pin);
@@ -20,7 +22,7 @@ public:
 
     void setMode(GpioPinMode mode);
     void digitalWrite(enum GpioPinState value);
-    enum GpioPinState digitalRead();
+    GpioPinState digitalRead();
 private:
     GPIO_TypeDef* m_port;
     uint32_t m_pin;

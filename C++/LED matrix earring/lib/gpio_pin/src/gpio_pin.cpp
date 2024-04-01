@@ -77,14 +77,18 @@ void GpioPin::setMode(GpioPinMode mode) {
     HAL_GPIO_Init(m_port, &GPIO_InitStruct);
 }
 
-void GpioPin::digitalWrite(enum GpioPinState value) {
+void GpioPin::digitalWrite(GpioPinState value) {
     HAL_GPIO_WritePin(m_port, m_pin, (value == GpioPinState::High) ? GPIO_PIN_SET : GPIO_PIN_RESET);
 }
 
-enum GpioPinState GpioPin::digitalRead() {
+GpioPinState GpioPin::digitalRead() {
     if (HAL_GPIO_ReadPin(m_port, m_pin) == GPIO_PIN_SET) {
         return GpioPinState::High;
     } else {
         return GpioPinState::Low;
     }
+}
+
+GpioPinState operator!(GpioPinState state) {
+    return (state == GpioPinState::Low) ? GpioPinState::High : GpioPinState::Low;
 }

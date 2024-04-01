@@ -17,7 +17,7 @@ public:
      * @param col_pins An array of GpioPin objects representing the column pins.
      * @param row_pins An array of GpioPin objects representing the row pins.
      */
-    LedMatrix(GpioPin col_pins[COLS], GpioPin row_pins[ROWS]) : m_col_pins(col_pins), m_row_pins(row_pins) {}
+    LedMatrix(GpioPin col_pins[COLS], GpioPin row_pins[ROWS], GpioPinState colActiveState, GpioPinState rowActiveState) : m_col_pins(col_pins), m_row_pins(row_pins), m_col_active_state(colActiveState), m_row_active_state(rowActiveState) {}
 
     /**
      * @brief Destructor for the LedMatrix class.
@@ -37,6 +37,9 @@ public:
         }
         // Clear the display
         clear();
+
+        // Update the display
+        update();
     }
 
     /**
@@ -66,22 +69,29 @@ public:
      * @brief Updates the LED matrix by refreshing the display.
      */
     void update() {
-        // Perform multiplexing using the row and column pins
-        for (size_t row = 0; row < ROWS; row++) {
-            // Set the row pin to HIGH
-            m_row_pins[row].digitalWrite(GpioPinState::High);
+        for (size_t brightness = 64; brightness < 255; brightness+=10){
+            // Perform multiplexing using the row and column pins
+            for (size_t row = 0; row < ROWS; row++) {
 
-            for (size_t col = 0; col < COLS; col++) {
-                // Set the column pin to the corresponding value from m_pixel_buffer
-                if (m_pixel_buffer[col][row] == 0) {
-                    m_col_pins[col].digitalWrite(GpioPinState::Low);
-                } else {
-                    m_col_pins[col].digitalWrite(GpioPinState::High);
+                // Prep the column pins
+                for (size_t col = 0; col < COLS; col++) {
+                    // Set the column pin to the corresponding value from m_pixel_buffer
+                    if (m_pixel_buffer[col][row] > brightness) {
+                        m_col_pins[col].digitalWrite(m_col_active_state);
+                    } else {
+                        m_col_pins[col].digitalWrite(!m_col_active_state);
+                    }
                 }
+                // Set the row pin to HIGH
+                m_row_pins[row].digitalWrite(m_row_active_state);
+                for (size_t i = 0; i < 10; i++){
+                    __NOP();
+                }
+                //HAL_Delay(1);
+                // Set the row pin to LOW
+                m_row_pins[row].digitalWrite(!m_row_active_state);
+
             }
-            HAL_Delay(100);
-            // Set the row pin to LOW
-            m_row_pins[row].digitalWrite(GpioPinState::Low);
         }
     }
 
@@ -98,12 +108,23 @@ public:
         }
     }
 
+    void invertFrame() {
+        for (size_t i = 0; i < COLS; i++) {
+            for (size_t j = 0; j < ROWS; j++) {
+                m_pixel_buffer[i][j] = 255 - m_pixel_buffer[i][j];
+            }
+        }
+    }
+
 private:
     // Private member variables
     uint8_t m_pixel_buffer[COLS][ROWS];
 
     GpioPin* m_col_pins;
     GpioPin* m_row_pins;
+
+    GpioPinState m_col_active_state;
+    GpioPinState m_row_active_state;
 
     // Private member functions
     
