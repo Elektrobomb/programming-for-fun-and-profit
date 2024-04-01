@@ -1,0 +1,8 @@
+{
+    "files.associations": {
+        "stm32f4xx_hal.h": "c",
+        "cstddef": "cpp",
+        "cstdlib": "cpp"
+    },
+    "cmake.configureOnOpen": false
+}
