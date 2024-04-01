@@ -57,16 +57,19 @@ int main() {
 
   while (1)
   {
-    /*
-    uint32_t pos = (HAL_GetTick() / 20) % 64;
+    matrix.clear();
+
+    uint32_t pos = (HAL_GetTick() / 100) % 64;
     uint32_t pos_x = pos % 8;
     uint32_t pos_y = pos / 8;
 
-    matrix.clear();
-    matrix.setPixel(pos_x, pos_y, 1);*/
-    matrix.clear(); 
-    matrix.cloneFrame(space_invader);
-    matrix.invertFrame();
+    //matrix.setPixel(pos_x, pos_y, 1);
+    //matrix.cloneFrame(space_invader);
+    //matrix.invertFrame();
+
+    //matrix.drawLine(0, 0, pos_x, pos_y, 255);
+
+    matrix.drawCircle(pos_x, pos_y, 3, 255);
 
     matrix.update();
   }
@@ -75,6 +78,7 @@ int main() {
 extern "C" void SysTick_Handler() {
   HAL_IncTick();
 }
+
 
 void SystemClock_Config() {
   RCC_OscInitTypeDef RCC_OscInitStruct;
@@ -134,4 +138,3 @@ void TIM_Config() {
 void Error_Handler() {
   // Error handling code
 }
-
