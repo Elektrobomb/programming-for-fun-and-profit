@@ -1,14 +1,19 @@
 #include "stm32f4xx_hal.h"
 #include "led_matrix.hpp"
 
+#include <cstdio>
+
 void SystemClock_Config();
 void GPIO_Config();
 void USART_Config();
 void SPI_Config();
 void I2C_Config();
 void TIM_Config();
+void USB_Config();
 
 void Error_Handler();
+
+
 
 static uint8_t space_invader[8][8]  = {
   0xfe, 0xda, 0xda, 0xfe, 0xfe, 0xd5, 0xd5, 0xfe, 
@@ -22,6 +27,8 @@ static uint8_t space_invader[8][8]  = {
 };
 
 
+UART_HandleTypeDef huart1;
+
 int main() {
   HAL_Init();
   SystemClock_Config();
@@ -30,6 +37,7 @@ int main() {
   SPI_Config();
   I2C_Config();
   TIM_Config();
+  USB_Config();
 
   GpioPin col_pins[] = {
     GpioPin(GPIOB, GPIO_PIN_5),
@@ -59,17 +67,17 @@ int main() {
   {
     matrix.clear();
 
-    uint32_t pos = (HAL_GetTick() / 100) % 64;
+    uint32_t pos = (HAL_GetTick() / 40) % 64;
     uint32_t pos_x = pos % 8;
     uint32_t pos_y = pos / 8;
 
     //matrix.setPixel(pos_x, pos_y, 1);
-    matrix.cloneFrame(space_invader);
-    matrix.invertFrame();
+    //matrix.cloneFrame(space_invader);
+    //matrix.invertFrame();
 
     //matrix.drawLine(0, 0, pos_x, pos_y, 255);
 
-    //matrix.drawCircle(pos_x, pos_y, 3, 255);
+    matrix.drawCircle(pos_x, pos_y, 3, 255);
 
     matrix.update();
   }
@@ -79,34 +87,41 @@ extern "C" void SysTick_Handler() {
   HAL_IncTick();
 }
 
-
 void SystemClock_Config() {
-  RCC_OscInitTypeDef RCC_OscInitStruct;
-  RCC_ClkInitTypeDef RCC_ClkInitStruct;
+  RCC_OscInitTypeDef RCC_OscInitStruct = {0};
+  RCC_ClkInitTypeDef RCC_ClkInitStruct = {0};
 
+  /** Configure the main internal regulator output voltage
+  */
   __HAL_RCC_PWR_CLK_ENABLE();
   __HAL_PWR_VOLTAGESCALING_CONFIG(PWR_REGULATOR_VOLTAGE_SCALE1);
 
-  RCC_OscInitStruct.OscillatorType = RCC_OSCILLATORTYPE_HSI;
-  RCC_OscInitStruct.HSIState = RCC_HSI_ON;
-  RCC_OscInitStruct.HSICalibrationValue = RCC_HSICALIBRATION_DEFAULT;
+  /** Initializes the RCC Oscillators according to the specified parameters
+  * in the RCC_OscInitTypeDef structure.
+  */
+  RCC_OscInitStruct.OscillatorType = RCC_OSCILLATORTYPE_HSE;
+  RCC_OscInitStruct.HSEState = RCC_HSE_ON;
   RCC_OscInitStruct.PLL.PLLState = RCC_PLL_ON;
-  RCC_OscInitStruct.PLL.PLLSource = RCC_PLLSOURCE_HSI;
-  RCC_OscInitStruct.PLL.PLLM = 16;
-  RCC_OscInitStruct.PLL.PLLN = 336;
-  RCC_OscInitStruct.PLL.PLLP = RCC_PLLP_DIV4;
-  RCC_OscInitStruct.PLL.PLLQ = 7;
+  RCC_OscInitStruct.PLL.PLLSource = RCC_PLLSOURCE_HSE;
+  RCC_OscInitStruct.PLL.PLLM = 25;
+  RCC_OscInitStruct.PLL.PLLN = 192;
+  RCC_OscInitStruct.PLL.PLLP = RCC_PLLP_DIV2;
+  RCC_OscInitStruct.PLL.PLLQ = 4;
   if (HAL_RCC_OscConfig(&RCC_OscInitStruct) != HAL_OK)
   {
     Error_Handler();
   }
 
-  RCC_ClkInitStruct.ClockType = RCC_CLOCKTYPE_SYSCLK | RCC_CLOCKTYPE_HCLK | RCC_CLOCKTYPE_PCLK1 | RCC_CLOCKTYPE_PCLK2;
+  /** Initializes the CPU, AHB and APB buses clocks
+  */
+  RCC_ClkInitStruct.ClockType = RCC_CLOCKTYPE_HCLK|RCC_CLOCKTYPE_SYSCLK
+                              |RCC_CLOCKTYPE_PCLK1|RCC_CLOCKTYPE_PCLK2;
   RCC_ClkInitStruct.SYSCLKSource = RCC_SYSCLKSOURCE_PLLCLK;
   RCC_ClkInitStruct.AHBCLKDivider = RCC_SYSCLK_DIV1;
   RCC_ClkInitStruct.APB1CLKDivider = RCC_HCLK_DIV2;
   RCC_ClkInitStruct.APB2CLKDivider = RCC_HCLK_DIV1;
-  if (HAL_RCC_ClockConfig(&RCC_ClkInitStruct, FLASH_LATENCY_5) != HAL_OK)
+
+  if (HAL_RCC_ClockConfig(&RCC_ClkInitStruct, FLASH_LATENCY_3) != HAL_OK)
   {
     Error_Handler();
   }
@@ -137,4 +152,8 @@ void TIM_Config() {
 
 void Error_Handler() {
   // Error handling code
+}
+
+void USB_Config() {
+  // Configure USB
 }
