@@ -51,7 +51,7 @@ public:
 
     virtual void init();
     virtual void setMode(GpioPinMode mode);
-    virtual void digitalWrite(enum GpioPinState value);
+    virtual void digitalWrite(GpioPinState value);
     virtual GpioPinState digitalRead();
 private:
     GpioPort m_port;
