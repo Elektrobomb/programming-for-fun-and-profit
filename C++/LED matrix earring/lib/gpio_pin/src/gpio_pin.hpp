@@ -13,19 +13,55 @@ enum GpioPinState {
     High = 1
 };
 
+enum GpioPort {
+    PortA = 0,
+    PortB = 1,
+    PortC = 2,
+    PortD = 3,
+    PortE = 4,
+    PortF = 5,
+    PortG = 6,
+    PortH = 7,
+};
+enum GpioPinNumber {
+    Pin0 = 0,
+    Pin1 = 1,
+    Pin2 = 2,
+    Pin3 = 3,
+    Pin4 = 4,
+    Pin5 = 5,
+    Pin6 = 6,
+    Pin7 = 7,
+    Pin8 = 8,
+    Pin9 = 9,
+    Pin10 = 10,
+    Pin11 = 11,
+    Pin12 = 12,
+    Pin13 = 13,
+    Pin14 = 14,
+    Pin15 = 15
+};
+
 GpioPinState operator!(GpioPinState state);
 
 class GpioPin {
 public:
-    GpioPin(GPIO_TypeDef* port, uint16_t pin);
+    GpioPin(GpioPort port, GpioPinNumber pin);
     ~GpioPin() {}
 
-    void setMode(GpioPinMode mode);
-    void digitalWrite(enum GpioPinState value);
-    GpioPinState digitalRead();
+    virtual void init();
+    virtual void setMode(GpioPinMode mode);
+    virtual void digitalWrite(enum GpioPinState value);
+    virtual GpioPinState digitalRead();
 private:
-    GPIO_TypeDef* m_port;
-    uint32_t m_pin;
+    GpioPort m_port;
+    GpioPinNumber m_pin;
+
+    GPIO_TypeDef* m_hal_port;
+    uint32_t m_hal_pin;
+
+    GPIO_TypeDef* getHalPort(GpioPort port);
+    uint32_t getHalPin(GpioPinNumber pin);
 };
 
 #endif // GPIO_PIN_HPP

@@ -40,24 +40,24 @@ int main() {
   USB_Config();
 
   GpioPin col_pins[] = {
-    GpioPin(GPIOB, GPIO_PIN_5),
-    GpioPin(GPIOA, GPIO_PIN_2),
-    GpioPin(GPIOA, GPIO_PIN_3),
-    GpioPin(GPIOA, GPIO_PIN_15),
-    GpioPin(GPIOA, GPIO_PIN_6),
-    GpioPin(GPIOB, GPIO_PIN_3),
-    GpioPin(GPIOB, GPIO_PIN_7),
-    GpioPin(GPIOB, GPIO_PIN_8)
+    GpioPin(GpioPort::PortB, GpioPinNumber::Pin5),
+    GpioPin(GpioPort::PortA, GpioPinNumber::Pin2),
+    GpioPin(GpioPort::PortA, GpioPinNumber::Pin3),
+    GpioPin(GpioPort::PortA, GpioPinNumber::Pin15),
+    GpioPin(GpioPort::PortA, GpioPinNumber::Pin6),
+    GpioPin(GpioPort::PortB, GpioPinNumber::Pin3),
+    GpioPin(GpioPort::PortB, GpioPinNumber::Pin7),
+    GpioPin(GpioPort::PortB, GpioPinNumber::Pin8)
   };
   GpioPin row_pins[] = {
-    GpioPin(GPIOA, GPIO_PIN_12),
-    GpioPin(GPIOB, GPIO_PIN_6),
-    GpioPin(GPIOA, GPIO_PIN_7),
-    GpioPin(GPIOB, GPIO_PIN_4),
-    GpioPin(GPIOA, GPIO_PIN_0),
-    GpioPin(GPIOA, GPIO_PIN_5),
-    GpioPin(GPIOA, GPIO_PIN_1),
-    GpioPin(GPIOA, GPIO_PIN_4)
+    GpioPin(GpioPort::PortA, GpioPinNumber::Pin12),
+    GpioPin(GpioPort::PortB, GpioPinNumber::Pin6),
+    GpioPin(GpioPort::PortA, GpioPinNumber::Pin7),
+    GpioPin(GpioPort::PortB, GpioPinNumber::Pin4),
+    GpioPin(GpioPort::PortA, GpioPinNumber::Pin0),
+    GpioPin(GpioPort::PortA, GpioPinNumber::Pin5),
+    GpioPin(GpioPort::PortA, GpioPinNumber::Pin1),
+    GpioPin(GpioPort::PortA, GpioPinNumber::Pin4)
   };
 
   LedMatrix<8,8> matrix(col_pins, row_pins, GpioPinState::High, GpioPinState::Low);
