@@ -5,9 +5,20 @@ channels:
 
 dependencies:
   - kaggle
-  - ipython
-  - matplotlib
-  - pandas
   - pip
   - python
+  - pandas
+  - numpy
+  - matplotlib
   - scikit-learn
+  - jupyter
+  - seaborn
+  - tensorflow
+  - keras
+  - pytorch
+  - torchvision
+  - opencv
+  - tqdm
+  - pillow
+  - tensorboard
+  

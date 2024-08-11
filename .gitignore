@@ -1,2 +1,5 @@
 #rust build artifact folders
 target
+
+#kaggle input data folders
+/kaggle/*/inputs
