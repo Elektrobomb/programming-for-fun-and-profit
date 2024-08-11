@@ -1,0 +1,13 @@
+name: kaggle-env
+
+channels:
+  - conda-forge
+
+dependencies:
+  - kaggle
+  - ipython
+  - matplotlib
+  - pandas
+  - pip
+  - python
+  - scikit-learn
