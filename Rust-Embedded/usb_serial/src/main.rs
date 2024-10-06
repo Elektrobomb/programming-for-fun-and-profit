@@ -29,27 +29,7 @@ bind_interrupts!(struct Irqs {
 async fn main(_spawner: Spawner) {
     info!("INIT:START");
 
-    let mut config: Config = Config::default();
-    {
-        use embassy_stm32::rcc::*;
-        config.rcc.hse = Some(Hse {
-            freq: Hertz(25_000_000),
-            mode: HseMode::Oscillator,
-        });
-        config.rcc.pll_src = PllSource::HSE;
-        config.rcc.pll = Some(Pll {
-            prediv: PllPreDiv::DIV25,
-            mul: PllMul::MUL192,
-            divp: Some(PllPDiv::DIV2), // 25mhz / 25 * 192 / 2 = 96Mhz.
-            divq: Some(PllQDiv::DIV4), // 25mhz / 25 * 192 / 4 = 48Mhz.
-            divr: None,
-        });
-        config.rcc.ahb_pre = AHBPrescaler::DIV1;
-        config.rcc.apb1_pre = APBPrescaler::DIV4;
-        config.rcc.apb2_pre = APBPrescaler::DIV2;
-        config.rcc.sys = Sysclk::PLL1_P; // 96Mhz
-        config.rcc.mux.clk48sel = mux::Clk48sel::PLL1_Q; // 48Mhz
-    }
+    let config: Config = generate_blackpill_clock_config();
     
     let p = embassy_stm32::init(config);
     // Spawn the LED task.
@@ -103,7 +83,7 @@ async fn main(_spawner: Spawner) {
     // Run the USB device.
     let usb_fut = usb.run();
 
-    // Do stuff with the class!
+    // Make a future that waits for the USB to connect, then echos data.
     let echo_fut = async {
         loop {
             class.wait_connection().await;
@@ -113,6 +93,8 @@ async fn main(_spawner: Spawner) {
         }
     };
 
+    // Wait for BOTH the usb and echo futures to complete before continuing.
+    // This is a simple way to run both tasks in parallel and wait for both to finish.
     join(usb_fut, echo_fut).await;
 
 }
@@ -153,4 +135,28 @@ async fn echo<'d, T: Instance + 'd>(class: &mut CdcAcmClass<'d, Driver<'d, T>>) 
             class.write_packet(b"Hello, world!\r\n").await?;
         }
     }
+}
+fn generate_blackpill_clock_config() -> Config {
+    let mut config: Config = Config::default();
+    {
+        use embassy_stm32::rcc::*;
+        config.rcc.hse = Some(Hse {
+            freq: Hertz(25_000_000),
+            mode: HseMode::Oscillator,
+        });
+        config.rcc.pll_src = PllSource::HSE;
+        config.rcc.pll = Some(Pll {
+            prediv: PllPreDiv::DIV25,
+            mul: PllMul::MUL192,
+            divp: Some(PllPDiv::DIV2), // 25mhz / 25 * 192 / 2 = 96Mhz.
+            divq: Some(PllQDiv::DIV4), // 25mhz / 25 * 192 / 4 = 48Mhz.
+            divr: None,
+        });
+        config.rcc.ahb_pre = AHBPrescaler::DIV1;
+        config.rcc.apb1_pre = APBPrescaler::DIV4;
+        config.rcc.apb2_pre = APBPrescaler::DIV2;
+        config.rcc.sys = Sysclk::PLL1_P; // 96Mhz
+        config.rcc.mux.clk48sel = mux::Clk48sel::PLL1_Q; // 48Mhz
+    }
+    return config;
 }
