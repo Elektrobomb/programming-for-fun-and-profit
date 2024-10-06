@@ -46,3 +46,10 @@ cargo run -- --speed 100
 You have now set up Embassy for Rust embedded development. Happy coding!
 
 For more information, visit the [Embassy documentation](https://embassy.dev/book/).
+
+# Further findings 6/10/2024
+ - A lot of the features of embassy seem to be in flux right now and the documentation + examples are all written for the main branch of embassy rather than the latest release!!!  
+
+ - If you run into issues caused by this (e.g. a feature / parameter listed in the documentation is missing), try removing the version tags from all of the embassy dependencies in your Cargo.toml and replacing them with `git = git = "https://github.com/embassy-rs/embassy"`
+
+ - This will download the latest features etc from `main` and should be more compatible with their documentation etc.  IMO this is a dumb problem.  
