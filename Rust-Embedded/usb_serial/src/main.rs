@@ -122,7 +122,7 @@ async fn led_task(led_pin: AnyPin) {
     let mut led = Output::new(led_pin, Level::High, Speed::Low);
 
     loop {
-        info!("Heartbeat()");
+        //info!("Heartbeat()");
         led.set_high();
         Timer::after(Duration::from_millis(500)).await;
         led.set_low();
@@ -148,5 +148,9 @@ async fn echo<'d, T: Instance + 'd>(class: &mut CdcAcmClass<'d, Driver<'d, T>>) 
         let data = &buf[..n];
         info!("data: {:x}", data);
         class.write_packet(data).await?;
+
+        if data == b"hi!" {
+            class.write_packet(b"Hello, world!\r\n").await?;
+        }
     }
 }
