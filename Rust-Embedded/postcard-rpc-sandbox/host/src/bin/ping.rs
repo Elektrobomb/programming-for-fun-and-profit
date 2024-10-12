@@ -1,6 +1,6 @@
 use std::time::Duration;
 
-use workbook_host_client::client::WorkbookClient;
+use host_client::client::WorkbookClient;
 use tokio::time::interval;
 
 #[tokio::main]
