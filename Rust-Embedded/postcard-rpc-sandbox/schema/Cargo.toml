@@ -1,0 +1,9 @@
+[package]
+name = "schema"
+version = "0.1.0"
+edition = "2021"
+
+[dependencies]
+postcard = "1.0.10"
+postcard-rpc = "0.7.0"
+serde = {version="1.0.210", features=["derive"], default-features = false}

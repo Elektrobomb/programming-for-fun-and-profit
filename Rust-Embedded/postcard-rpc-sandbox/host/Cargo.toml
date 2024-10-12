@@ -1,0 +1,11 @@
+[package]
+name = "host_client"
+version = "0.1.0"
+edition = "2021"
+
+[dependencies]
+schema = { path = "../schema" }
+postcard = "1.0.10"
+postcard-rpc = "0.7.0"
+tokio = "1.40.0"
+
