@@ -1,7 +1,7 @@
 use std::convert::Infallible;
 use postcard_rpc::{
     host_client::{HostClient, HostErr},
-    schema::{WireError, ERROR_PATH},
+    standard_icd::{WireError, ERROR_PATH},
 };
 use schema::{BadPositionError, GetUniqueIdEndpoint, PingEndpoint, SetAllLedEndpoint, SetSingleLedEndpoint, SingleLed};
 
@@ -77,7 +77,7 @@ impl WorkbookClient {
         brightness: u8,
     ) -> Result<(), WorkbookError<Infallible>> {
         self.client
-            .send_resp::<SetAllLedEndpoint>(&[brightness; 24])
+            .send_resp::<SetAllLedEndpoint>(&[brightness; 3])
             .await?;
         Ok(())
     }
