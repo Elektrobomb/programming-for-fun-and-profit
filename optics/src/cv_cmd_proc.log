@@ -1,0 +1,44 @@
+spec_data: RDM [] []
+spec_data: LEN [] ['VERSION: 11.1 SR1       LENS VERSION: 83       Creation Date: 03-Feb-2023']
+spec_data: TIT [] ['codv_16960']
+pupil_spec_data: EPD 25.000000
+spec_data: DIM [] ['M']
+spec_data: INI [] ['EO ']
+field_spec_data: XAN [] [0.0]
+field_spec_data: YAN [] [0.0]
+field_spec_data: WTF [] [5.0]
+field_spec_data: VUY [] [0.0]
+field_spec_data: VLY [] [0.0]
+private_catalog: PRV [] []
+private_catalog: PWL [] [550.0]
+Unsupported PRV glass def: NOA61 LAU
+Line 17: Command NOA61 not supported
+private_catalog: END [] []
+surface_data: STO [] []
+surface_data: ASP [] []
+profile_data: K [] [-0.8641265]
+profile_data: CUF [] [0.0]
+profile_data: A [] [3.151369e-06]
+profile_data: B [] [-1.837155e-09]
+profile_data: C [] [-3.33679e-12]
+profile_data: D [] [0.0]
+aperture_data: CIR [] [12.5]
+aperture_data: CIR [] [12.5]
+Line 32: Command PIM not supported
+Line 34: Command GO not supported
+spec_data: RDM [] []
+spec_data: LEN [] ['VERSION: 11.2 SR1       LENS VERSION: 84       Creation Date: 01-May-2019']
+spec_data: TIT [] ['45015']
+pupil_spec_data: EPD 12.000000
+spec_data: DIM [] ['M']
+spec_data: INI [] ['EO ']
+field_spec_data: XAN [] [0.0]
+field_spec_data: YAN [] [0.0]
+field_spec_data: WTF [] [1.0]
+field_spec_data: VUY [] [0.0]
+field_spec_data: VLY [] [0.0]
+surface_data: STO [] []
+surface_data: SLB [] ['45015']
+aperture_data: CIR [] [5.5]
+Line 21: Command PIM not supported
+Line 23: Command GO not supported

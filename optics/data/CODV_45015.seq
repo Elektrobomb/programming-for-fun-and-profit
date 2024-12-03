@@ -1,0 +1,22 @@
+RDM;LEN       "VERSION: 11.2 SR1       LENS VERSION: 84       Creation Date: 01-May-2019"
+TITLE '45015'
+EPD   12.0
+DIM   M
+WL    587.56
+REF   1
+WTW   1
+INI   'EO '
+XAN   0.0
+YAN   0.0
+WTF   1.0
+VUY   0.0
+VLY   0.0
+SO    0.0 0.1e14
+S     -9.420000000000025 2.2 NSF11_SCHOTT
+  STO
+  SLB "45015"
+  CIR 5.5
+S     0.0 -13.23696466450395
+  PIM
+SI    0.0 0.0
+GO 
